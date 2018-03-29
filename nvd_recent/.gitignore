@@ -1,0 +1,3 @@
+#ignore ndv dirs
+*
+!.gitignore
