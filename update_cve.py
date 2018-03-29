@@ -17,17 +17,17 @@ def init(url, key):
 misp = init(misp_url, misp_key)
 
 #Scarico gli zip dai feed JSON di NVD
-if len(sys.argv) == 2 and sys.argv[1] == "u":
+if len(sys.argv) >= 2 and sys.argv[1] == "u":
 	print("Script started in update mode\n")
 	r_file = requests.get('https://static.nvd.nist.gov/feeds/json/cve/1.0/nvdcve-1.0-recent.json.zip', stream=True)
 	with open("nvd_recent/nvdcve_recent.zip", 'wb') as f:
                         for chunk in r_file:
                                 f.write(chunk)
-	files = [f for f in listdir("nvd_recent/") if isfile(join("nvd_recent/", f))]
+	files = [f for f in listdir("nvd_recent/") if not f.startswith('.') and isfile(join("nvd_recent/", f))]
 	print("Download of nvdcve-1.0-recent.json.zip")
-elif len(sys.argv) == 2 and sys.argv[1] == "l":
+elif len(sys.argv) >= 2 and sys.argv[1] == "l":
 	print("Script started in local mode\n")
-	files = [f for f in listdir("nvd/") if isfile(join("nvd/", f))]
+	files = [f for f in listdir("nvd/") if not f.startswith('.') and isfile(join("nvd/", f))]
 else:
 	r = requests.get('https://nvd.nist.gov/vuln/data-feeds')
 	for filename in re.findall("nvdcve-1.0-[0-9]*\.json\.zip",r.text):
@@ -36,15 +36,24 @@ else:
 		with open("nvd/" + filename, 'wb') as f:
 			for chunk in r_file:
 				f.write(chunk)
-	files = [f for f in listdir("nvd/") if isfile(join("nvd/", f))]
+	files = [f for f in listdir("nvd/") if not f.startswith('.') and isfile(join("nvd/", f))]
 files.sort()
 
+skip = False
 for file in files:
 	archive = zipfile.ZipFile(join("nvd/", file), 'r')
 	jsonfile = archive.open(archive.namelist()[0])
 	cve_dict = json.loads(jsonfile.read().decode('utf8'))
 	jsonfile.close()
 	for cve in cve_dict['CVE_Items']:
+			cve_info =  cve['cve']['CVE_data_meta']['ID']
+			#Salto fino a {cve info}
+			if not skip and len(sys.argv) == 3 and cve_info != sys.argv[2]:
+				print(cve_info + " skipped\n")
+				continue;
+			elif not skip and len(sys.argv) == 3 and cve_info == sys.argv[2]:
+				skip = True
+
 			#Raccolgo informazioni sul contenuto del cve
 			#Leggo il punteggio per ricavare il livello della minaccia
 
@@ -63,7 +72,6 @@ for file in files:
 			cve_analysis = 2	#Analisi completata
 
 			#cerco se l'evento già esiste
-			cve_info =  cve['cve']['CVE_data_meta']['ID']
 			cve_comment = str(cve['cve']['description']['description_data'][0]['value'])
 			result = misp.search_all(cve_info)
 
@@ -75,10 +83,13 @@ for file in files:
 			if len(result['response']) != 0:
 				cve_id = result['response'][0]['Event']['id']
 				event = misp.get_event(cve_id)
+				if event['Event']['published'] == False:
+					misp.fast_publish(cve_id)
 				print(cve_info + " already exists: " + event['Event']['uuid'] + "\n")
 			else:
 				cve_date = cve['publishedDate']
 				event = misp.new_event(cve_distrib, cve_threat, cve_analysis, cve_info, cve_date)
+				misp.fast_publish(event['Event']['id'])
 				print(cve_info + " added: " + event['Event']['uuid'] + "\n")
 
 			#Aggiungo la descrizione dell'evento
