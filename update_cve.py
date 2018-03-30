@@ -48,10 +48,10 @@ for file in files:
 	for cve in cve_dict['CVE_Items']:
 			cve_info =  cve['cve']['CVE_data_meta']['ID']
 			#Salto fino a {cve info}
-			if not skip and len(sys.argv) == 3 and cve_info != sys.argv[2]:
+			if not skip and len(sys.argv) == 3 and sys.argv[2] not in cve_info:
 				print(cve_info + " skipped\n")
 				continue;
-			elif not skip and len(sys.argv) == 3 and cve_info == sys.argv[2]:
+			elif not skip and len(sys.argv) == 3 and sys.argv[2] in cve_info:
 				skip = True
 
 			#Raccolgo informazioni sul contenuto del cve
