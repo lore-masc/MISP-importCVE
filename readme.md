@@ -30,9 +30,22 @@ git clone https://github.com/lore-masc/MISP-importCVE.git
 ## Invoke a modality
 
 * **Standard mode** - you can download all the zip provided by the NVD platform. The zip will be stored in the "nvd/" dir and extracted.
+```
+./update_cve.py
+```
 * **Local mode** - the script does not make any download, but simply extracts the zip files already present in the "nvd/" dir.
+```
+./update_cve.py l
+./update_cve.py l CVE-2017
+./update_cve.py l CVE-2017-0001
+```
 * **Update mode** - you can download the zip of the recent CVEs in the "nvd_recent/" dir and then import them.
-
+$
+```
+./update_cve.py u
+./update_cve.py u CVE-2017
+./update_cve.py u CVE-2017-0001
+```
 
 ## Authors
 
