@@ -50,7 +50,7 @@ for file in files:
 			#Salto fino a {cve info}
 			if not skip and len(sys.argv) == 3 and sys.argv[2] not in cve_info:
 				print(cve_info + " skipped\n")
-				continue;
+				continue
 			elif not skip and len(sys.argv) == 3 and sys.argv[2] in cve_info:
 				skip = True
 
@@ -66,7 +66,7 @@ for file in files:
 				else:
 					cve_threat = 1
 			except:
-				cve_threat = 4
+				cve_threat = 2
 
 			cve_distrib = 2		#Solo per questa istanza
 			cve_analysis = 2	#Analisi completata
