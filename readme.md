@@ -27,6 +27,18 @@ git clone https://github.com/lore-masc/MISP-importCVE.git
 ./update_cve.py
 ```
 
+Copy keys.py file to configure MISP parametres and authorizes the script to run.
+
+```
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+misp_url = 'https://misp-url.org'
+misp_key = 'a4PLf8QICdDdOmFjwdtSYqkCqn9CvN0VQt7mpUUf'	# The MISP auth key can be found in Automation panel
+misp_verifycert = False		#If you don't dispose a digital certificate, set False
+
+```
+
 ## Invoke a modality
 
 * **Standard mode** - you can download all the zip provided by the NVD platform. The zip will be stored in the "nvd/" dir and extracted.
