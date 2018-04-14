@@ -4,7 +4,7 @@ The script allows to import all CVE list in MISP platform with its relative cont
 
 ### Prerequisites
 
-Before install the script, you make sure to have permission to lo into virtual machine server that hosts the MISP application and to have role permission to get pyMISP API.
+Before install the script, you make sure to have permission into virtual machine server that hosts the MISP application and to have role permission to get pyMISP API.
 
 ```
 Authorization: a4PLf8QICdDdOmFjwdtSYqkCqn9CvN0VQt7mpUUf
