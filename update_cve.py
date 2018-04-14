@@ -71,9 +71,9 @@ for file in files:
 			cve_distrib = 2		#Solo per questa istanza
 			cve_analysis = 2	#Analisi completata
 
-			#cerco se l'evento già esiste
+			#cerco se l'evento gia' esiste
 			cve_comment = str(cve['cve']['description']['description_data'][0]['value'])
-			result = misp.search_all(cve_info)
+			result = misp.search_index(eventinfo=cve_info)
 
 			#Verifico che il CVE non sia stato ritirato
 			if "** REJECT **" in cve_comment:
@@ -81,7 +81,7 @@ for file in files:
 
 			#Aggiorno eventuale evento esistente
 			if len(result['response']) != 0:
-				cve_id = result['response'][0]['Event']['id']
+				cve_id = result['response'][0]['id']
 				event = misp.get_event(cve_id)
 				if event['Event']['published'] == False:
 					misp.fast_publish(cve_id)
