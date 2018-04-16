@@ -41,7 +41,11 @@ files.sort()
 
 skip = False
 for file in files:
-	archive = zipfile.ZipFile(join("nvd/", file), 'r')
+	if sys.argv[1] == "u":
+		dirname = "nvd_recent"
+	else:
+		dirname = "nvd/"
+	archive = zipfile.ZipFile(join(dirname, file), 'r')
 	jsonfile = archive.open(archive.namelist()[0])
 	cve_dict = json.loads(jsonfile.read().decode('utf8'))
 	jsonfile.close()
