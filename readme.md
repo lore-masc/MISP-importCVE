@@ -52,12 +52,24 @@ misp_verifycert = False		#If you don't dispose a digital certificate, set False
 ./update_cve.py l CVE-2017-0001
 ```
 * **Update mode** - you can download the zip of the recent CVEs in the "nvd_recent/" dir and then import them.
-$
 ```
 ./update_cve.py u
 ./update_cve.py u CVE-2017
 ./update_cve.py u CVE-2017-0001
 ```
+
+## Crontab for update mode
+
+For the correct use of script update mode is useful to set the unix crontab. Types *crontab -e* to add a new cron rule.
+It's a best practice update cve once a day. The follow rule runs the script every day at 07:00. 
+```
+0 7 * * * cd /home/$USER/MISP_importCVE/;./update_cve.py u
+```
+If you prefer save the script output in a log file, types:
+```
+0 7 * * * cd /home/$USER/MISP_importCVE/;./update_cve.py u > log.txt
+```
+Check the setted rules with *crontab -l* command.
 
 ## Authors
 
