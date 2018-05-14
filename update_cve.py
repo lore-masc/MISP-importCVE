@@ -10,6 +10,7 @@ import zipfile
 import json
 import sys
 import random
+import datetime
 
 def init(url, key):
     return PyMISP(url, key, False, 'json', debug=False)
@@ -40,6 +41,8 @@ else:
 files.sort()
 
 skip = False
+i = 0
+j = 0
 for file in files:
 	if sys.argv[1] == "u":
 		dirname = "nvd_recent"
@@ -90,11 +93,13 @@ for file in files:
 				if event['Event']['published'] == False:
 					misp.fast_publish(cve_id)
 				print(cve_info + " already exists: " + event['Event']['uuid'] + "\n")
+				j = j + 1
 			else:
 				cve_date = cve['publishedDate']
 				event = misp.new_event(cve_distrib, cve_threat, cve_analysis, cve_info, cve_date)
 				misp.fast_publish(event['Event']['id'])
 				print(cve_info + " added: " + event['Event']['uuid'] + "\n")
+				i = i + 1
 
 			#Aggiungo la descrizione dell'evento
 			misp.add_named_attribute(event, 'comment', cve_comment)
@@ -123,3 +128,9 @@ for file in files:
 						print("Added tag to " + cve_info + ": " + cve_malware_platform + "\n")
 			except:
 				print("No malware platform added to " + cve_info + "\n")
+f = open("log.txt", "a")
+f.write(str(datetime.datetime.now()) + "\n")
+f.write("Added " + str(i) + " new events\n")
+f.write("Found " + str(j) + " events already existed\n")
+f.write("----------------------------------------\n")
+f.close()

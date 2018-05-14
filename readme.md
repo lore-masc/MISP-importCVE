@@ -63,13 +63,13 @@ misp_verifycert = False		#If you don't dispose a digital certificate, set False
 For the correct use of script update mode is useful to set the unix crontab. Types *crontab -e* to add a new cron rule.
 It's a best practice update cve once a day. The follow rule runs the script every day at 07:00. 
 ```
-0 7 * * * cd /home/$USER/MISP_importCVE/;./update_cve.py u
-```
-If you prefer save the script output in a log file, types:
-```
-0 7 * * * cd /home/$USER/MISP_importCVE/;./update_cve.py u > log.txt
+0 7 * * * cd /$HOME/MISP_importCVE/; ./update_cve.py u > /dev/null
 ```
 Check the setted rules with *crontab -l* command.
+If you want, you can check the output in a log file, types:
+```
+cat log.txt
+```
 
 ## Authors
 
