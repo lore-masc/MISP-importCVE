@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 from pymisp import PyMISP
-from keys import misp_url, misp_key
+from keys import misp_url, misp_key, misp_verifycert
 from os import listdir
 from os.path import isfile, join
 import requests
@@ -13,7 +13,7 @@ import random
 import datetime
 
 def init(url, key):
-    return PyMISP(url, key, False, 'json', debug=False)
+    return PyMISP(url, key, misp_verifycert, 'json', debug=False)
 
 misp = init(misp_url, misp_key)
 

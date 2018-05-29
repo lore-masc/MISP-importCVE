@@ -6,10 +6,10 @@ import sys
 import json
 import os
 sys.path.append('../')
-from keys import misp_url, misp_key
+from keys import misp_url, misp_key, misp_verifycert
 
 def init(url, key):
-	return PyMISP(url, key, False, 'json', debug=False)
+	return PyMISP(url, key, misp_verifycert, 'json', debug=False)
 
 misp = init(misp_url, misp_key)
 if len(sys.argv) < 3:
