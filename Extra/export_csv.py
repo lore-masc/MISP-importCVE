@@ -22,7 +22,7 @@ tag = sys.argv[1]
 path = sys.argv[2]
 
 #check path end char
-if path.endswith(os.sep):
+if not path.endswith(os.sep):
 	path = path + os.sep
 
 #check setted data type to export
