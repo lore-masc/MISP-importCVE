@@ -52,7 +52,10 @@ if len(result['response']) != 0:
 			attr_type = attr['type']
 			attr_value = attr['value']
 			if attr_type == data_type:
-				line = event_info + SEPARATOR + attr_value + '\n'
+				line = event_info + SEPARATOR + attr_value
+				if "ip" in data_type:
+					line = line + SEPARATOR + "misp malicious ip" + SEPARATOR + "maliciousip"
+				line = line + '\n'
 				f = open(csv_name, 'a')
 				f.write(line)
 				f.close()
